@@ -1,0 +1,36 @@
+text,label
+I was charged twice for my subscription,billing
+My refund has not arrived yet,billing
+Why was my card billed again this month?,billing
+The invoice amount looks incorrect,billing
+I cancelled but still got charged,billing
+
+The application crashes whenever I login,technical_issue
+Export CSV is not working,technical_issue
+I cannot upload files to the platform,technical_issue
+Reset password keeps failing,technical_issue
+The dashboard stays blank after signing in,technical_issue
+
+Please add dark mode support,feature_request
+Can you add Slack integration?,feature_request
+I would like email notifications,feature_request
+Please support PDF export,feature_request
+Can we get a mobile application?,feature_request
+
+Your support team never replied,complaint
+I am very disappointed with the service,complaint
+The product quality is unacceptable,complaint
+This has been a terrible experience,complaint
+Customer support was extremely unhelpful,complaint
+
+Where can I find documentation?,other
+What are your business hours?,other
+How do I contact sales?,other
+Do you offer enterprise pricing?,other
+Where is your company located?,other
+
+The app keeps crashing and I am frustrated,technical_issue
+Support never helped resolve my login problem,complaint
+I am unhappy because exports keep failing,complaint
+Login fails every morning,technical_issue
+The system is slow and support has been useless,complaint

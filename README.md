@@ -1,54 +1,51 @@
-# Legal RAG Pipeline
+# Artikate Studio – Assessment
 
-## Overview
+The assessment consists of:
 
-This project implements a Retrieval-Augmented Generation (RAG) pipeline for answering questions over legal documents.
-
-The system supports:
-
-* PDF ingestion
-* Chunking
-* Embedding generation
-* Vector storage using ChromaDB
-* Semantic retrieval
-* Source citation
-* Confidence scoring
-* Evaluation using Precision@3
+* Section 1 – Diagnose a Failing LLM Pipeline
+* Section 2 – Production-Grade Legal RAG Pipeline
+* Section 3 – Customer Support Ticket Classifier
+* Section 4 – Written Systems Design Review
 
 ---
 
-## Project Structure
+# Repository Structure
 
 ```text
 .
-├── data/
-│   ├── nda_vendor_x.pdf
-│   ├── msa_vendor_y.pdf
-│   └── privacy_policy.pdf
-│
-├── src/
-│   ├── ingest.py
-│   └── pipeline.py
-│
-├── run.py
-├── evaluate.py
-├── DESIGN.md
 ├── README.md
-└── requirements.txt
+├── ANSWERS.md
+├── DESIGN.md
+├── requirements.txt
+│
+├── Sec2/
+│   ├── data/
+│   ├── src/
+│   ├── ingest_once.py
+│   ├── run.py
+│   └── evaluate.py
+│
+└── Sec3/
+    ├── data/
+    ├── generate_data.py
+    ├── train.py
+    ├── predict.py
+    ├── evaluate.py
+    └── latency_test.py
 ```
 
 ---
 
-## Setup
+# Setup
 
-### 1. Create Virtual Environment
+## 1. Create Virtual Environment
 
 ```bash
 python -m venv venv
 source venv/bin/activate
 ```
 
-### 2. Install Dependencies
+## 2. Install Dependencies
 
 ```bash
 pip install -r requirements.txt
@@ -56,23 +53,45 @@ pip install -r requirements.txt
 
 ---
 
-## Document Ingestion
+# Section 1 – Diagnose a Failing LLM Pipeline
 
-The sample legal documents are located in the `data/` folder.
+Written responses covering:
 
-To create embeddings and populate the vector database:
+* Hallucinated pricing
+* Language switching
+* Latency degradation
+* Post-mortem summary
 
-```bash
-python ingest_once.py
+See:
+
+```text
+ANSWERS.md
 ```
-
-This will create the local ChromaDB database.
 
 ---
 
-## Run a Query
+# Section 2 – Production-Grade Legal RAG Pipeline
 
-Execute:
+Implemented features:
+
+* PDF ingestion
+* Recursive chunking
+* Embedding generation
+* ChromaDB vector storage
+* Semantic retrieval
+* Source citation
+* Confidence scoring
+* Hallucination mitigation
+
+## Build Vector Store
+
+```bash
+cd Sec2
+
+python ingest_once.py
+```
+
+## Run Example Query
 
 ```bash
 python run.py
@@ -82,37 +101,17 @@ Example query:
 
 ```python
 result = pipeline.query(
-    "What is the notice period in the NDA with Vendor X?"
+    question="What is the notice period in the NDA with Vendor X?"
 )
 ```
 
-Example output:
-
-```python
-{
-    "answer": "...",
-    "sources": [
-        {
-            "document": "nda_vendor_x.pdf",
-            "page": 1,
-            "chunk": "..."
-        }
-    ],
-    "confidence": 0.62
-}
-```
-
----
-
 ## Run Evaluation
-
-Evaluate retrieval quality using Precision@3:
 
 ```bash
 python evaluate.py
 ```
 
-Example output:
+Result:
 
 ```text
 Correct Retrievals: 9
@@ -120,36 +119,141 @@ Total Questions: 10
 Precision@3: 0.90
 ```
 
----
-
-## Design Decisions
-
-Detailed architectural decisions and trade-offs are documented in:
+Additional design decisions are documented in:
 
 ```text
 DESIGN.md
 ```
 
-This includes:
+---
+
+# Section 3 – Ticket Classification
+
+Implemented using:
+
+* TF-IDF
+* Logistic Regression
+* Scikit-Learn
+
+## Generate Dataset
+
+```bash
+cd Sec3
+
+python generate_data.py
+```
+
+## Train Model
+
+```bash
+python train.py
+```
+
+## Evaluate Model
+
+```bash
+python evaluate.py
+```
+
+Observed Results:
+
+```text
+Accuracy: 0.90
+```
+
+Per-Class F1:
+
+| Class           | F1 Score |
+| --------------- | -------- |
+| billing         | 1.00     |
+| complaint       | 0.82     |
+| feature_request | 1.00     |
+| other           | 1.00     |
+| technical_issue | 0.77     |
+
+## Run Latency Test
+
+```bash
+python latency_test.py
+```
+
+Observed Result:
+
+```text
+Latency: 2.13 ms
+Latency test passed.
+```
+
+---
+
+# Section 4 – Systems Design Review
+
+Written answers covering:
+
+* Prompt Injection & LLM Security
+* Evaluating LLM Output Quality
+
+See:
+
+```text
+ANSWERS.md
+```
+
+---
+
+# Documentation
+
+### DESIGN.md
+
+Contains:
 
 * Chunking strategy
 * Embedding model choice
 * Vector store selection
 * Retrieval strategy
 * Hallucination mitigation
-* Scaling considerations
 * Evaluation methodology
+* Scaling considerations
+
+### ANSWERS.md
+
+Contains:
+
+* Section 1 written responses
+* Section 3 model selection and evaluation discussion
+* Section 4 systems design answers
 
 ---
 
-## Technologies Used
+# Technologies Used
 
 * Python
 * ChromaDB
 * Sentence Transformers
-* BAAI/bge-small-en-v1.5
+* Scikit-Learn
+* Logistic Regression
+* TF-IDF
 * PyMuPDF
 * LangChain Text Splitters
 
-```
-```
+---
+
+# Notes
+
+* No external APIs are required.
+* No API keys are required.
+* All code runs locally.
+* The implementation prioritizes simplicity, reproducibility, and clear evaluation.
+
+
+# Acknowledgements
+
+AI-assisted tools were used during the completion of this assessment for productivity and learning purposes, including:
+
+* Brainstorming and discussion of architectural trade-offs
+* Assistance with debugging and resolving implementation issues
+* Generation of synthetic training data for Section 3
+* Drafting and refinement of documentation files such as README.md, DESIGN.md, and ANSWERS.md
+* Reviewing code structure and evaluation methodology
+
+All design decisions, implementation choices, evaluation results, and final submitted content were reviewed, modified where necessary, and validated by me before submission.

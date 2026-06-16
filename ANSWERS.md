@@ -136,6 +136,143 @@ None of these require rebuilding the system. All three are targeted fixes.
 
 ---
 
+## Section 03 — Fine-Tune or Prompt-Engineer a Classifier
+
+### Model Selection
+
+I chose a TF-IDF + Logistic Regression classifier instead of a prompt-based LLM solution or a fine-tuned transformer model.
+
+The problem involves only five ticket categories:
+
+* billing
+* technical_issue
+* feature_request
+* complaint
+* other
+
+Most tickets contain clear keywords such as "refund", "charged twice", "dark mode", "export CSV", or "support team". Because of this, a lightweight text-classification model is sufficient and provides much lower latency than an LLM-based solution.
+
+I considered using a few-shot prompt classifier with an LLM API, but that approach introduces API costs, network latency, and dependency on external services. Since labelled data is available and the task is relatively simple, a local classifier is a more practical choice.
+
+---
+
+### Latency and Throughput Analysis
+
+System requirements:
+
+* One ticket every 30 seconds
+* 2,880 tickets per day
+* Less than 500 ms inference time per ticket
+* Single CPU server
+
+Observed latency:
+
+* 20-ticket batch inference: 2.13 ms
+
+This is significantly below the required 500 ms limit and easily supports the expected daily ticket volume.
+
+| Metric             | Requirement   | Observed  |
+| ------------------ | ------------- | --------- |
+| Latency per ticket | <500 ms       | ~2.13 ms  |
+| Daily volume       | 2,880 tickets | Supported |
+
+The solution comfortably satisfies both latency and throughput requirements.
+
+---
+
+### Dataset and Evaluation
+
+No dataset was provided as part of the assessment.
+
+To train the model, I generated a synthetic dataset containing 1,000 support tickets (200 examples per class) using template-based data generation.
+
+The assignment also recommends using a manually written or manually verified evaluation set. Due to time constraints, I was not able to create and verify a large evaluation dataset of 100+ examples. Instead, I created a smaller manually reviewed validation set containing representative examples from all five classes, including a few intentionally ambiguous tickets.
+
+The results should therefore be viewed as a functional validation of the classifier rather than a production-grade benchmark.
+
+---
+
+### Evaluation Results
+
+Accuracy: **0.90**
+
+#### Per-Class F1 Scores
+
+| Class           | F1 Score |
+| --------------- | -------- |
+| billing         | 1.00     |
+| complaint       | 0.82     |
+| feature_request | 1.00     |
+| other           | 1.00     |
+| technical_issue | 0.77     |
+
+#### Confusion Matrix
+
+```text
+[[5 0 0 0 0]
+ [0 7 0 0 1]
+ [0 0 5 0 0]
+ [0 0 0 5 0]
+ [0 2 0 0 5]]
+```
+
+The classifier performs well overall and shows realistic confusion between complaint and technical_issue examples.
+
+---
+
+### Most Frequently Confused Classes
+
+The two classes most frequently confused were:
+
+* complaint
+* technical_issue
+
+This happens because users often report a technical problem while also expressing frustration.
+
+For example:
+
+> "The application keeps crashing and I am frustrated."
+
+This ticket contains both:
+
+* a technical issue ("application keeps crashing")
+* a complaint ("I am frustrated")
+
+The classifier must determine the user's primary intent, which is not always obvious.
+
+To improve separation between these classes, I would use:
+
+* More manually labelled examples
+* Ticket metadata
+* Sentiment features
+* Multi-label classification
+
+---
+
+### Latency Validation Test
+
+I implemented a latency test using 20 raw support tickets.
+
+The test verifies that:
+
+1. Every prediction belongs to one of the five valid classes.
+2. Inference completes within the required 500 ms limit.
+
+Observed latency:
+
+```text
+2.13 ms
+```
+
+Result:
+
+```text
+Latency test passed.
+```
+
+This confirms that the classifier meets the deployment requirements on a CPU-only server.
+
+---
 
 ## Section 04 — Written Systems Design Review
 

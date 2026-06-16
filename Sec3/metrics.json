@@ -1,0 +1,85 @@
+{
+  "accuracy": 0.9,
+  "classification_report": {
+    "billing": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1-score": 1.0,
+      "support": 5.0
+    },
+    "complaint": {
+      "precision": 0.7777777777777778,
+      "recall": 0.875,
+      "f1-score": 0.8235294117647058,
+      "support": 8.0
+    },
+    "feature_request": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1-score": 1.0,
+      "support": 5.0
+    },
+    "other": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1-score": 1.0,
+      "support": 5.0
+    },
+    "technical_issue": {
+      "precision": 0.8333333333333334,
+      "recall": 0.7142857142857143,
+      "f1-score": 0.7692307692307693,
+      "support": 7.0
+    },
+    "accuracy": 0.9,
+    "macro avg": {
+      "precision": 0.9222222222222222,
+      "recall": 0.9178571428571429,
+      "f1-score": 0.918552036199095,
+      "support": 30.0
+    },
+    "weighted avg": {
+      "precision": 0.9018518518518519,
+      "recall": 0.9,
+      "f1-score": 0.8990950226244344,
+      "support": 30.0
+    }
+  },
+  "confusion_matrix": [
+    [
+      5,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      7,
+      0,
+      0,
+      1
+    ],
+    [
+      0,
+      0,
+      5,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      5,
+      0
+    ],
+    [
+      0,
+      2,
+      0,
+      0,
+      5
+    ]
+  ]
+}
